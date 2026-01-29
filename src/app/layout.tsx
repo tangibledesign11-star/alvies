@@ -3,25 +3,25 @@ import { Geist } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+	variable: "--font-geist-sans",
+	subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "Alvies",
-  description: "Premium cowboy boots for the modern trail",
+	title: "Alvies",
+	description: "Premium cowboy boots for the modern trail",
 };
 
 export default function RootLayout({
-  children,
+	children,
 }: Readonly<{
-  children: React.ReactNode;
+	children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en" className="dark">
-      <body className={`${geistSans.variable} font-sans antialiased`}>
-        {children}
-      </body>
-    </html>
-  );
+	return (
+		<html lang="en" className="dark">
+			<body className={`${geistSans.variable} font-sans antialiased`}>
+				{children}
+			</body>
+		</html>
+	);
 }

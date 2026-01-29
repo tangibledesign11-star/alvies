@@ -40,7 +40,7 @@ export function ConversationLayer({
 	return (
 		<div
 			className={`
-				fixed inset-x-0 bottom-24 top-0 flex flex-col justify-end px-6
+				fixed inset-x-0 bottom-24 top-0 flex flex-col justify-end px-5 md:px-6
 				transition-opacity duration-500 ease-in-out
 				${isExiting ? "opacity-0" : "opacity-100"}
 			`}
@@ -64,17 +64,16 @@ export function ConversationLayer({
 								${message.sender === "system" ? "justify-start" : "justify-end"}
 							`}
 						>
-							{/* Rounded rectangle message container — light padding, semi-opaque bg */}
+							{/* Rounded rectangle message container — solid bg for reliable contrast */}
 							<div
 								className={`
 									max-w-[80%]
 									rounded-xl
 									px-4 py-2.5
-									backdrop-blur-xl
 									${
 										message.sender === "system"
-											? "bg-black/50"
-											: "bg-white/[0.12]"
+											? "bg-black/70"
+											: "bg-white/20"
 									}
 								`}
 							>

@@ -69,30 +69,32 @@ export default function Home() {
 		return () => clearTimeout(timer);
 	}, []);
 
-	// Detect conversation completion
+	// Detect conversation completion — set flag exactly once
 	useEffect(() => {
 		if (messages.length >= MAX_MESSAGES && !conversationComplete) {
 			setConversationComplete(true);
 		}
 	}, [messages.length, conversationComplete]);
 
-	// Handle exit animation and navigation
+	// Handle exit animation and navigation — depends ONLY on conversationComplete
 	useEffect(() => {
-		if (conversationComplete && !isExiting && !hasNavigatedRef.current) {
-			setIsExiting(true);
-			setInputEnabled(false);
+		if (!conversationComplete) return;
+		if (hasNavigatedRef.current) return;
 
-			// Navigate after animation completes
-			const timer = setTimeout(() => {
-				if (!hasNavigatedRef.current) {
-					hasNavigatedRef.current = true;
-					router.push("/products");
-				}
-			}, EXIT_ANIMATION_DURATION);
+		// Mark as navigating immediately to prevent duplicate runs
+		hasNavigatedRef.current = true;
 
-			return () => clearTimeout(timer);
-		}
-	}, [conversationComplete, isExiting, router]);
+		// Trigger visual exit state
+		setIsExiting(true);
+		setInputEnabled(false);
+
+		// Navigate after animation completes
+		const timer = setTimeout(() => {
+			router.push("/products");
+		}, EXIT_ANIMATION_DURATION);
+
+		return () => clearTimeout(timer);
+	}, [conversationComplete, router]);
 
 	const handleSubmit = useCallback((content: string) => {
 		// Generate unique ID using counter ref

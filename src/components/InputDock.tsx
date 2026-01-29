@@ -55,7 +55,7 @@ export function InputDock({
 	return (
 		<div
 			className={`
-				fixed bottom-0 left-0 right-0 p-6 pb-8
+				fixed bottom-0 left-0 right-0 px-5 pt-6 pb-8 md:px-6
 				transition-opacity duration-500 ease-in-out
 				${isExiting ? "opacity-0" : "opacity-100"}
 			`}
@@ -73,14 +73,13 @@ export function InputDock({
 						flex-1
 						cursor-text
 						rounded-xl
-						bg-black/50
+						bg-black/70
 						px-4 py-3
 						text-[15px] font-normal leading-relaxed
 						text-white
 						placeholder:text-white/40
 						caret-white/60
-						backdrop-blur-md
-						focus:bg-black/60
+						focus:bg-black/75
 						focus:outline-none
 						disabled:cursor-not-allowed
 						disabled:opacity-0
@@ -96,11 +95,10 @@ export function InputDock({
 					className={`
 						flex h-[46px] w-[46px] cursor-pointer items-center justify-center
 						rounded-xl
-						bg-black/50
-						backdrop-blur-xl
+						bg-black/70
 						transition-colors duration-300 ease-in-out
-						hover:bg-black/60
-						focus:bg-black/60
+						hover:bg-black/75
+						focus:bg-black/75
 						focus:outline-none
 						disabled:cursor-not-allowed
 						disabled:opacity-0
