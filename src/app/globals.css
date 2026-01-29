@@ -1,26 +1,59 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  --background: #0a0908;
+  --foreground: #faf9f7;
+}
+
+.dark {
+  --background: #0a0908;
+  --foreground: #faf9f7;
+}
+
+@layer base {
+  * {
+    @apply border-white/10;
+  }
+
+  body {
+    @apply bg-background text-foreground;
   }
 }
 
+/* Fade-in animation — restrained timing, no bounce */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 450ms ease forwards;
+}
+
+/* Input focus — subtle, fade only */
+input {
+  transition: border-color 300ms ease, background-color 300ms ease;
+}
+
+input:focus {
+  box-shadow: none;
+}
+
+/* Disable scrolling */
+html,
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  overflow: hidden;
+  height: 100%;
 }
