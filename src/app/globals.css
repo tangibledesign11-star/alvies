@@ -3,57 +3,85 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--font-sans: var(--font-geist-sans);
 }
 
 :root {
-  --background: #0a0908;
-  --foreground: #faf9f7;
+	--background: #0a0908;
+	--foreground: #faf9f7;
 }
 
 .dark {
-  --background: #0a0908;
-  --foreground: #faf9f7;
+	--background: #0a0908;
+	--foreground: #faf9f7;
 }
 
 @layer base {
-  * {
-    @apply border-white/10;
-  }
+	* {
+		@apply border-white/10;
+	}
 
-  body {
-    @apply bg-background text-foreground;
-  }
+	body {
+		@apply bg-background text-foreground;
+	}
 }
 
-/* Fade-in animation — restrained timing, no bounce */
+/* Fade-in animation — restrained, ease-in-out */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
 }
 
 .animate-fade-in {
-  animation: fadeIn 450ms ease forwards;
+	animation: fadeIn 350ms ease-in-out forwards;
 }
 
-/* Input focus — subtle, fade only */
-input {
-  transition: border-color 300ms ease, background-color 300ms ease;
+/* Input and button base transitions */
+input,
+button {
+	transition:
+		background-color 300ms ease-in-out,
+		opacity 300ms ease-in-out;
 }
 
-input:focus {
-  box-shadow: none;
+input:focus,
+button:focus {
+	box-shadow: none;
 }
 
-/* Disable scrolling */
+/* Conversation scroll — subtle, natural */
+.conversation-scroll {
+	scrollbar-width: thin;
+	scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+	scroll-behavior: smooth;
+}
+
+.conversation-scroll::-webkit-scrollbar {
+	width: 4px;
+}
+
+.conversation-scroll::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+.conversation-scroll::-webkit-scrollbar-thumb {
+	background-color: rgba(255, 255, 255, 0.1);
+	border-radius: 2px;
+}
+
+.conversation-scroll::-webkit-scrollbar-thumb:hover {
+	background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Disable body scrolling */
 html,
 body {
-  overflow: hidden;
-  height: 100%;
+	overflow: hidden;
+	height: 100%;
 }

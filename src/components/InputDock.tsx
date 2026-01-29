@@ -1,27 +1,30 @@
 "use client";
 
 import { useState, useCallback, KeyboardEvent, ChangeEvent } from "react";
+import { Mic } from "lucide-react";
 
 interface InputDockProps {
 	onSubmit: (message: string) => void;
 	placeholder?: string;
 	disabled?: boolean;
+	isExiting?: boolean;
 }
 
 /**
- * Glassmorphism-styled input dock for the bottom of the viewport.
- * Designed to feel calm and concierge-like.
+ * Input dock with consistent rounded rectangle shape language.
+ * Mic button in its own rounded rectangle container.
+ * Uses lucide-react for icons.
  *
- * Future enhancement: This is where AI logic would connect.
- * The onSubmit callback could trigger an API call or state update
- * that processes the user's message.
+ * Future enhancement: Connect speech-to-text when mic is active.
  */
 export function InputDock({
 	onSubmit,
-	placeholder = "Where are you headed?",
+	placeholder = "Type here…",
 	disabled = false,
+	isExiting = false,
 }: InputDockProps) {
 	const [value, setValue] = useState("");
+	const [micPermission, setMicPermission] = useState<"prompt" | "granted" | "denied">("prompt");
 
 	const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
 		setValue(e.target.value);
@@ -37,9 +40,28 @@ export function InputDock({
 		[value, onSubmit, disabled]
 	);
 
+	const handleMicClick = useCallback(async () => {
+		if (disabled) return;
+
+		try {
+			const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+			stream.getTracks().forEach((track) => track.stop());
+			setMicPermission("granted");
+		} catch {
+			setMicPermission("denied");
+		}
+	}, [disabled]);
+
 	return (
-		<div className="fixed bottom-0 left-0 right-0 p-6 pb-10">
-			<div className="mx-auto max-w-xl">
+		<div
+			className={`
+				fixed bottom-0 left-0 right-0 p-6 pb-8
+				transition-opacity duration-500 ease-in-out
+				${isExiting ? "opacity-0" : "opacity-100"}
+			`}
+		>
+			<div className="mx-auto flex max-w-xl items-center gap-3">
+				{/* Input — rounded rectangle */}
 				<input
 					type="text"
 					value={value}
@@ -47,23 +69,60 @@ export function InputDock({
 					onKeyDown={handleKeyDown}
 					placeholder={placeholder}
 					disabled={disabled}
-					className="
-						w-full
-						rounded-2xl
-						border border-white/[0.08]
-						bg-neutral/[0.80]
-						px-6 py-4
-						text-base text-white/85
-						placeholder:text-white/45
-						backdrop-blur-xl
-						focus:border-white/[0.20]
-						focus:bg-white/[0.06]
+					className={`
+						flex-1
+						cursor-text
+						rounded-xl
+						bg-black/50
+						px-4 py-3
+						text-[15px] font-normal leading-relaxed
+						text-white
+						placeholder:text-white/40
+						caret-white/60
+						backdrop-blur-md
+						focus:bg-black/60
 						focus:outline-none
 						disabled:cursor-not-allowed
-						disabled:opacity-50
-					"
+						disabled:opacity-0
+					`}
 					aria-label="Message input"
 				/>
+
+				{/* Mic button — rounded rectangle container */}
+				<button
+					type="button"
+					onClick={handleMicClick}
+					disabled={disabled}
+					className={`
+						flex h-[46px] w-[46px] cursor-pointer items-center justify-center
+						rounded-xl
+						bg-black/50
+						backdrop-blur-xl
+						transition-colors duration-300 ease-in-out
+						hover:bg-black/60
+						focus:bg-black/60
+						focus:outline-none
+						disabled:cursor-not-allowed
+						disabled:opacity-0
+					`}
+					aria-label={
+						micPermission === "granted"
+							? "Microphone enabled"
+							: micPermission === "denied"
+								? "Microphone denied"
+								: "Enable microphone"
+					}
+				>
+					<Mic
+						size={18}
+						strokeWidth={1.5}
+						className={`
+							transition-colors duration-300
+							${micPermission === "granted" ? "text-white" : "text-white/60"}
+							${micPermission === "denied" ? "text-white/30" : ""}
+						`}
+					/>
+				</button>
 			</div>
 		</div>
 	);
