@@ -28,23 +28,73 @@
 	}
 }
 
-/* Fade-in animation — restrained, ease-out */
+/* ============================================
+   GLASS INTERACTIVE HOVER STATES
+   (Base styles are inline, this is for hover)
+   ============================================ */
+
+.glass-interactive:hover {
+	background-color: rgba(255, 255, 255, 0.14) !important;
+	border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.glass-interactive:focus-within {
+	background-color: rgba(255, 255, 255, 0.14) !important;
+	border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* ============================================
+   ANIMATIONS
+   Using transform instead of opacity to
+   preserve backdrop-filter on glass surfaces
+   ============================================ */
+
+/* Message entrance - scale + slight translate, NO opacity */
+@keyframes messageIn {
+	from {
+		transform: translateZ(0) translateY(8px) scale(0.97);
+	}
+	to {
+		transform: translateZ(0) translateY(0) scale(1);
+	}
+}
+
+.animate-message-in {
+	animation: messageIn 250ms ease-out forwards;
+}
+
+/* Exit fade overlay */
+@keyframes fadeOut {
+	from {
+		background-color: rgba(0, 0, 0, 0);
+	}
+	to {
+		background-color: rgba(0, 0, 0, 1);
+	}
+}
+
+.animate-fade-out {
+	animation: fadeOut 500ms ease-in-out forwards;
+}
+
+/* Legacy fade-in for non-glass elements */
 @keyframes fadeIn {
 	from {
 		opacity: 0;
-		transform: translateY(4px);
 	}
 	to {
 		opacity: 1;
-		transform: translateY(0);
 	}
 }
 
 .animate-fade-in {
-	animation: fadeIn 300ms ease-out forwards;
+	animation: fadeIn 250ms ease-out forwards;
 }
 
-/* Conversation scroll — subtle, barely visible */
+/* ============================================
+   SCROLLBAR
+   ============================================ */
+
 .conversation-scroll {
 	scrollbar-width: thin;
 	scrollbar-color: rgba(255, 255, 255, 0.06) transparent;
@@ -68,16 +118,12 @@
 	background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Disable body scrolling */
+/* ============================================
+   GLOBAL
+   ============================================ */
+
 html,
 body {
 	overflow: hidden;
 	height: 100%;
-}
-
-/* Glass surface support — ensure backdrop-filter works */
-@supports not (backdrop-filter: blur(8px)) {
-	.backdrop-blur-\[8px\] {
-		background-color: rgba(255, 255, 255, 0.15);
-	}
 }

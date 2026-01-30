@@ -14,13 +14,8 @@ interface InputDockProps {
 /**
  * Input dock using Apple-style subtle glass system.
  *
- * Material Philosophy:
- * - Same GlassSurface primitive as message bubbles
- * - Unified material system across all UI
- * - Text at full opacity for guaranteed contrast
- *
- * Interactive states maintain the glass aesthetic with
- * minimal, restrained feedback (slight tint increase).
+ * Note: Avoids opacity transitions on container as they break backdrop-filter.
+ * Uses visibility for exit state instead.
  */
 export function InputDock({
 	onSubmit,
@@ -59,11 +54,8 @@ export function InputDock({
 
 	return (
 		<div
-			className={`
-				fixed bottom-0 left-0 right-0 px-5 pt-6 pb-8 md:px-6
-				transition-opacity duration-500 ease-in-out
-				${isExiting ? "opacity-0" : "opacity-100"}
-			`}
+			className="fixed bottom-0 left-0 right-0 px-5 pt-6 pb-8 md:px-6"
+			style={{ visibility: isExiting ? "hidden" : "visible" }}
 		>
 			<div className="mx-auto flex max-w-xl items-center gap-2.5">
 				{/* Input — GlassInteractive surface */}
@@ -75,7 +67,7 @@ export function InputDock({
 						onKeyDown={handleKeyDown}
 						placeholder={placeholder}
 						disabled={disabled}
-						className={`
+						className="
 							w-full
 							bg-transparent
 							px-4 py-3
@@ -85,7 +77,7 @@ export function InputDock({
 							caret-white/70
 							focus:outline-none
 							disabled:cursor-not-allowed
-						`}
+						"
 						aria-label="Message input"
 					/>
 				</GlassInteractive>
@@ -96,12 +88,12 @@ export function InputDock({
 						type="button"
 						onClick={handleMicClick}
 						disabled={disabled}
-						className={`
+						className="
 							flex h-[46px] w-[46px] cursor-pointer items-center justify-center
 							bg-transparent
 							focus:outline-none
 							disabled:cursor-not-allowed
-						`}
+						"
 						aria-label={
 							micPermission === "granted"
 								? "Microphone enabled"
