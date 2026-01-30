@@ -91,6 +91,20 @@
 	animation: fadeIn 250ms ease-out forwards;
 }
 
+/* Product image transition - scale only, preserves backdrop-filter */
+@keyframes productIn {
+	from {
+		transform: translateZ(0) scale(0.95);
+	}
+	to {
+		transform: translateZ(0) scale(1);
+	}
+}
+
+.animate-product-in {
+	animation: productIn 300ms ease-out forwards;
+}
+
 /* ============================================
    SCROLLBAR
    ============================================ */
