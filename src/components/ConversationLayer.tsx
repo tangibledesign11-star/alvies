@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { GlassSurface } from "./GlassSurface";
 
 export interface Message {
 	id: string;
@@ -14,11 +15,16 @@ interface ConversationLayerProps {
 }
 
 /**
- * Conversation display with rounded rectangle message containers.
- * Full opacity text with semi-opaque backgrounds for contrast.
- * AI messages: left, darker bg. User messages: right, lighter bg.
+ * Conversation display using Apple-style subtle glass system.
  *
- * Future enhancement: Connect to AI service for dynamic responses.
+ * Material Philosophy:
+ * - Subtle, near-invisible glass that prioritizes clarity
+ * - Material presence without visual noise
+ * - Text is always full opacity for guaranteed contrast
+ *
+ * Message Differentiation:
+ * - AI vs User distinguished primarily by alignment (left vs right)
+ * - Minimal tint variation (2-4%) — never dark vs light cards
  */
 export function ConversationLayer({
 	messages,
@@ -45,8 +51,8 @@ export function ConversationLayer({
 				${isExiting ? "opacity-0" : "opacity-100"}
 			`}
 		>
-			{/* Top gradient mask for scroll overflow */}
-			<div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-32 bg-gradient-to-b from-black/70 via-black/30 to-transparent" />
+			{/* Top gradient mask — very subtle fade for scroll overflow */}
+			<div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-24 bg-gradient-to-b from-black/30 to-transparent" />
 
 			{/* Message container */}
 			<div
@@ -54,7 +60,7 @@ export function ConversationLayer({
 				className="conversation-scroll mx-auto w-full max-w-xl cursor-default overflow-y-auto"
 				style={{ maxHeight: "calc(100vh - 160px)" }}
 			>
-				<div className="flex flex-col gap-3 pb-4 pt-36">
+				<div className="flex flex-col gap-3 pb-4 pt-28">
 					{messages.map((message) => (
 						<div
 							key={message.id}
@@ -64,23 +70,16 @@ export function ConversationLayer({
 								${message.sender === "system" ? "justify-start" : "justify-end"}
 							`}
 						>
-							{/* Rounded rectangle message container — solid bg for reliable contrast */}
-							<div
-								className={`
-									max-w-[80%]
-									rounded-xl
-									px-4 py-2.5
-									${
-										message.sender === "system"
-											? "bg-black/70"
-											: "bg-white/20"
-									}
-								`}
+							{/* GlassSurface — unified material system */}
+							<GlassSurface
+								variant={message.sender === "system" ? "default" : "subtle"}
+								className="max-w-[80%] px-4 py-2.5"
 							>
+								{/* Text at full opacity — non-negotiable */}
 								<p className="text-[15px] font-normal leading-relaxed text-white">
 									{message.content}
 								</p>
-							</div>
+							</GlassSurface>
 						</div>
 					))}
 				</div>

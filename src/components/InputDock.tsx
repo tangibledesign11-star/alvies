@@ -2,6 +2,7 @@
 
 import { useState, useCallback, KeyboardEvent, ChangeEvent } from "react";
 import { Mic } from "lucide-react";
+import { GlassInteractive } from "./GlassSurface";
 
 interface InputDockProps {
 	onSubmit: (message: string) => void;
@@ -11,11 +12,15 @@ interface InputDockProps {
 }
 
 /**
- * Input dock with consistent rounded rectangle shape language.
- * Mic button in its own rounded rectangle container.
- * Uses lucide-react for icons.
+ * Input dock using Apple-style subtle glass system.
  *
- * Future enhancement: Connect speech-to-text when mic is active.
+ * Material Philosophy:
+ * - Same GlassSurface primitive as message bubbles
+ * - Unified material system across all UI
+ * - Text at full opacity for guaranteed contrast
+ *
+ * Interactive states maintain the glass aesthetic with
+ * minimal, restrained feedback (slight tint increase).
  */
 export function InputDock({
 	onSubmit,
@@ -60,67 +65,62 @@ export function InputDock({
 				${isExiting ? "opacity-0" : "opacity-100"}
 			`}
 		>
-			<div className="mx-auto flex max-w-xl items-center gap-3">
-				{/* Input — rounded rectangle */}
-				<input
-					type="text"
-					value={value}
-					onChange={handleChange}
-					onKeyDown={handleKeyDown}
-					placeholder={placeholder}
-					disabled={disabled}
-					className={`
-						flex-1
-						cursor-text
-						rounded-xl
-						bg-black/70
-						px-4 py-3
-						text-[15px] font-normal leading-relaxed
-						text-white
-						placeholder:text-white/40
-						caret-white/60
-						focus:bg-black/75
-						focus:outline-none
-						disabled:cursor-not-allowed
-						disabled:opacity-0
-					`}
-					aria-label="Message input"
-				/>
-
-				{/* Mic button — rounded rectangle container */}
-				<button
-					type="button"
-					onClick={handleMicClick}
-					disabled={disabled}
-					className={`
-						flex h-[46px] w-[46px] cursor-pointer items-center justify-center
-						rounded-xl
-						bg-black/70
-						transition-colors duration-300 ease-in-out
-						hover:bg-black/75
-						focus:bg-black/75
-						focus:outline-none
-						disabled:cursor-not-allowed
-						disabled:opacity-0
-					`}
-					aria-label={
-						micPermission === "granted"
-							? "Microphone enabled"
-							: micPermission === "denied"
-								? "Microphone denied"
-								: "Enable microphone"
-					}
-				>
-					<Mic
-						size={18}
-						strokeWidth={1.5}
+			<div className="mx-auto flex max-w-xl items-center gap-2.5">
+				{/* Input — GlassInteractive surface */}
+				<GlassInteractive className="flex-1" disabled={disabled}>
+					<input
+						type="text"
+						value={value}
+						onChange={handleChange}
+						onKeyDown={handleKeyDown}
+						placeholder={placeholder}
+						disabled={disabled}
 						className={`
-							transition-colors duration-300
-							${micPermission === "granted" ? "text-white" : "text-white/60"}
-							${micPermission === "denied" ? "text-white/30" : ""}
+							w-full
+							bg-transparent
+							px-4 py-3
+							text-[15px] font-normal leading-relaxed
+							text-white
+							placeholder:text-white/40
+							caret-white/70
+							focus:outline-none
+							disabled:cursor-not-allowed
 						`}
+						aria-label="Message input"
 					/>
-				</button>
+				</GlassInteractive>
+
+				{/* Mic button — GlassInteractive surface */}
+				<GlassInteractive disabled={disabled}>
+					<button
+						type="button"
+						onClick={handleMicClick}
+						disabled={disabled}
+						className={`
+							flex h-[46px] w-[46px] cursor-pointer items-center justify-center
+							bg-transparent
+							focus:outline-none
+							disabled:cursor-not-allowed
+						`}
+						aria-label={
+							micPermission === "granted"
+								? "Microphone enabled"
+								: micPermission === "denied"
+									? "Microphone denied"
+									: "Enable microphone"
+						}
+					>
+						<Mic
+							size={18}
+							strokeWidth={1.5}
+							className={`
+								transition-colors duration-200
+								${micPermission === "granted" ? "text-white" : "text-white/60"}
+								${micPermission === "denied" ? "text-white/30" : ""}
+							`}
+						/>
+					</button>
+				</GlassInteractive>
 			</div>
 		</div>
 	);

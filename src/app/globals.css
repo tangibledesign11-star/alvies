@@ -28,42 +28,31 @@
 	}
 }
 
-/* Fade-in animation — restrained, ease-in-out */
+/* Fade-in animation — restrained, ease-out */
 @keyframes fadeIn {
 	from {
 		opacity: 0;
+		transform: translateY(4px);
 	}
 	to {
 		opacity: 1;
+		transform: translateY(0);
 	}
 }
 
 .animate-fade-in {
-	animation: fadeIn 350ms ease-in-out forwards;
+	animation: fadeIn 300ms ease-out forwards;
 }
 
-/* Input and button base transitions */
-input,
-button {
-	transition:
-		background-color 300ms ease-in-out,
-		opacity 300ms ease-in-out;
-}
-
-input:focus,
-button:focus {
-	box-shadow: none;
-}
-
-/* Conversation scroll — subtle, natural */
+/* Conversation scroll — subtle, barely visible */
 .conversation-scroll {
 	scrollbar-width: thin;
-	scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+	scrollbar-color: rgba(255, 255, 255, 0.06) transparent;
 	scroll-behavior: smooth;
 }
 
 .conversation-scroll::-webkit-scrollbar {
-	width: 4px;
+	width: 3px;
 }
 
 .conversation-scroll::-webkit-scrollbar-track {
@@ -71,12 +60,12 @@ button:focus {
 }
 
 .conversation-scroll::-webkit-scrollbar-thumb {
-	background-color: rgba(255, 255, 255, 0.1);
+	background-color: rgba(255, 255, 255, 0.06);
 	border-radius: 2px;
 }
 
 .conversation-scroll::-webkit-scrollbar-thumb:hover {
-	background-color: rgba(255, 255, 255, 0.15);
+	background-color: rgba(255, 255, 255, 0.1);
 }
 
 /* Disable body scrolling */
@@ -84,4 +73,11 @@ html,
 body {
 	overflow: hidden;
 	height: 100%;
+}
+
+/* Glass surface support — ensure backdrop-filter works */
+@supports not (backdrop-filter: blur(8px)) {
+	.backdrop-blur-\[8px\] {
+		background-color: rgba(255, 255, 255, 0.15);
+	}
 }
